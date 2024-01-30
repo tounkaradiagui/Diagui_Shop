@@ -1,5 +1,5 @@
 import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -21,7 +21,7 @@ const LoginScreen = () => {
       try {
         const token = await AsyncStorage.getItem("authToken");
         if(token){
-          navigation.replace("Home");
+          navigation.replace("Main");
         }
       } catch (error) {
         console.log("Message d'erreur", error);
@@ -39,7 +39,7 @@ const LoginScreen = () => {
         console.log(response);
         const token = response.data.token;
         AsyncStorage.setItem("authToken", token);
-        navigation.replace("Home");
+        navigation.replace("Main");
       })
       .catch((error) => {
         Alert.alert("Erreur de connexion", "Email ou Mot de Passe Incorrecte");

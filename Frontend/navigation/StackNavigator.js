@@ -5,16 +5,63 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './../screens/LoginScreen';
 import RegisterScreen from './../screens/RegisterScreen';
 import HomeScreen from '../screens/HomeScreen';
-
-const Stack = createNativeStackNavigator();
-
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
+import { Ionicons } from '@expo/vector-icons';
 const StackNavigator = () => {
+
+  const Stack = createNativeStackNavigator();
+  const Tab = createBottomTabNavigator();
+  function BottomTabs () {
+    return (
+        <Tab.Navigator>
+          <Tab.Screen name="Home" component={HomeScreen} options={
+            {
+              tabBarLabel: "Accueil",
+              tabBarLabelStyle:{color:"#078ECB"},
+              headerShown:false,
+              tabBarIcon:({focused}) => focused  ? (
+                <Ionicons name="home-sharp" size={24} color="#078ECB" />
+              ) : (
+                <Ionicons name="home-outline" size={24} color="black" />
+              )
+            }
+          }/>
+          <Tab.Screen name="Profile" component={HomeScreen} options={
+            {
+              tabBarLabel: "Profil",
+              tabBarLabelStyle:{color:"#078ECB"},
+              headerShown:false,
+              tabBarIcon:({focused}) => focused  ? (
+                <Ionicons name="person" size={24} color="#078ECB" />
+              ) : (
+                <Ionicons name="person-outline" size={24} color="black" />
+              )
+            }
+          }/>
+          <Tab.Screen name="Panier" component={HomeScreen} options={
+            {
+              tabBarLabel: "Panier",
+              tabBarLabelStyle:{color:"#078ECB"},
+              headerShown:false,
+              tabBarIcon:({focused}) => focused  ? (
+                <Ionicons name="cart-sharp" size={24} color="#078ECB" />
+              ) : (
+                <Ionicons name="cart-outline" size={24} color="black" />
+              )
+            }
+          }/>
+        </Tab.Navigator>
+      )
+  }
+
+
+
   return (
     <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
-            <Stack.Screen name="Home" options={{headerShown:false}} component={HomeScreen} />
             <Stack.Screen name="Login" options={{headerShown:false}} component={LoginScreen} />
             <Stack.Screen name="Register" options={{headerShown:false}} component={RegisterScreen} />
+            <Stack.Screen name="Main" options={{headerShown:false}} component={BottomTabs} />
         </Stack.Navigator>
     </NavigationContainer>
   )
