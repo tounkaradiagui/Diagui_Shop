@@ -8,16 +8,29 @@ import {
   Dimensions,
   Button,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../redux/CartReducercer";
 
 const ProductInfoScreen = ({ item }) => {
   const route = useRoute();
   const { width } = Dimensions.get("window");
   const height = (width * 100) / 100;
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const [addedToCart, setAddedToCart] = useState(false);
+  const addItemToCart = (item) => {
+    setAddedToCart(true)
+    dispatch(addToCart(item))
+    setTimeout(() => {
+      setAddedToCart(false)
+    }, 60000)
+  }
+  const cart = useSelector((state) => state.cart.cart);
+  console.log("Cart Logs", cart);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -112,7 +125,11 @@ const ProductInfoScreen = ({ item }) => {
         <Text style={{padding:10, fontSize:16, color:'green'}}>En Stock</Text>
 
         <TouchableOpacity style={{padding:10}}>
-            <Button color={'red'} text='black' title='Ajouter au panier' onPress={() => navigation.navigate('Main')} />
+            {addedToCart ? (
+              <Button color={'red'} text='black' title='Déjà ajouté' onPress={() => addItemToCart(route.params.item)} />
+            ) : (
+              <Button color={'red'} text='black' title='Ajouter au panier' onPress={() => addItemToCart(route.params.item)} />
+            )}
         </TouchableOpacity>
 
         <TouchableOpacity style={{padding:10, marginBottom:10}}>

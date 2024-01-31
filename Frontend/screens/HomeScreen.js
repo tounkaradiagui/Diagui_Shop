@@ -18,6 +18,7 @@ import axios from "axios";
 import ProductItems from "../components/ProductItems";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 const HomeScreen = () => {
   const lists = [
@@ -259,11 +260,15 @@ const HomeScreen = () => {
     fetchData();
   }, []);
 
+  console.log("products", products);
+
+  const cart = useSelector((state) => state.cart.cart);
+  console.log("Cart Logs", cart);
+
   const onGenderOpen = useCallback(() => {
     setcompanyOpen(false);
   }, []);
 
-  console.log("products", products);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -376,7 +381,16 @@ const HomeScreen = () => {
         </Text>
         <View style={styles.trending}>
           {trending.map((item, index) => (
-            <TouchableOpacity key={index} style={{ padding: 10 }}>
+            <TouchableOpacity key={index} style={{ padding: 10 }} onPress={() => navigation.navigate("Info", {
+              id: item.id,
+              title: item.title,
+              price: item?.price,
+              carouselImages: item?.carouselImages,
+              color: item?.color,
+              size: item?.size,
+              oldPrice: item?.oldPrice,
+              item:  item,
+            })}>
               <Image
                 source={{ uri: item?.image }}
                 style={{
