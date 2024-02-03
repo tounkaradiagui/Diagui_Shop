@@ -19,6 +19,7 @@ import ProductItems from "../components/ProductItems";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
+import { BottomModal, ModalContent, SlideAnimation } from "react-native-modals";
 
 const HomeScreen = () => {
   const lists = [
@@ -95,6 +96,9 @@ const HomeScreen = () => {
     "https://images.pexels.com/photos/637076/pexels-photo-637076.jpeg?auto=compress&cs=tinysrgb&w=600",
     "https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=600",
     "https://images.pexels.com/photos/12725055/pexels-photo-12725055.jpeg?auto=compress&cs=tinysrgb&w=600",
+    "https://images.pexels.com/photos/8859144/pexels-photo-8859144.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+    "https://images.pexels.com/photos/6540917/pexels-photo-6540917.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+    "https://images.pexels.com/photos/5584997/pexels-photo-5584997.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
   ];
 
   const trending = [
@@ -236,6 +240,7 @@ const HomeScreen = () => {
   ];
 
   const navigation = useNavigation();
+  
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("men's clothing");
   const [open, setOpen] = useState(false);
@@ -260,264 +265,393 @@ const HomeScreen = () => {
     fetchData();
   }, []);
 
-  console.log("products", products);
+  // console.log("products", JSON.stringify(products, null, 2));
 
   const cart = useSelector((state) => state.cart.cart);
-  console.log("Cart Logs", cart);
+  // console.log("Cart Logs", JSON.stringify(cart, null, 2));
 
   const onGenderOpen = useCallback(() => {
     setcompanyOpen(false);
   }, []);
 
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.subHeader}>
-          <TouchableOpacity>
-            <Ionicons name="cart" size={24} color="white" />
-          </TouchableOpacity>
-          <Text style={{ color: "white", fontSize: 18, fontWeight: "bold" }}>
-            Diagui Shop
-          </Text>
-          <TouchableOpacity>
-            <Ionicons name="menu" size={30} color="white" />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.searchBox}>
-          <TextInput
-            placeholder="Rechercher un produit"
-            style={styles.searchInput}
-          />
-          <TouchableOpacity>
-            <Ionicons
-              name="search"
-              size={24}
-              color="black"
-              style={{ marginRight: 10 }}
-            />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.deliveryAddress}>
-          <TouchableOpacity>
-            <Ionicons name="location-sharp" size={24} color="white" />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={{ color: "white", fontSize: 14 }}>
-              Livraison à Diagui Tounkara - Ville : Bamako
+    <>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <View style={styles.subHeader}>
+            <TouchableOpacity>
+              <Ionicons name="cart" size={24} color="white" />
+            </TouchableOpacity>
+            <Text style={{ color: "white", fontSize: 18, fontWeight: "bold" }}>
+              Diagui Shop
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <MaterialIcons name="keyboard-arrow-down" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-      </View>
+            <TouchableOpacity>
+              <Ionicons name="menu" size={30} color="white" />
+            </TouchableOpacity>
+          </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <ScrollView
-          style={{ backgroundColor: "#f5f6fa" }}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        >
-          {lists.map((item, index) => (
-            <TouchableOpacity key={index} style={styles.productListCategories}>
-              <Image
-                style={{
-                  width: 60,
-                  height: 60,
-                  resizeMode: "contain",
-                  borderRadius: 10,
-                }}
-                source={{ uri: item.image }}
+          <View style={styles.searchBox}>
+            <TextInput
+              placeholder="Rechercher un produit"
+              style={styles.searchInput}
+            />
+            <TouchableOpacity>
+              <Ionicons
+                name="search"
+                size={24}
+                color="black"
+                style={{ marginRight: 10 }}
               />
-              <Text
-                style={{
-                  fontSize: 15,
-                  fontWeight: "bold",
-                  textAlign: "center",
-                }}
-              >
-                {item.name}
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity
+            style={styles.deliveryAddress}
+            onPress={() => setModalVisible(!modalVisible)}
+          >
+            <View>
+              <Ionicons name="location-sharp" size={24} color="white" />
+            </View>
+            <View>
+              <Text style={{ color: "white", fontSize: 14 }}>
+                Livraison à Diagui Tounkara - Ville : Bamako
               </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-
-        <SliderBox
-          images={images}
-          circleLoop
-          dotColor={"#078ECB"}
-          inactiveDotColor={"#f5f6fa"}
-          paginationBoxVerticalPadding={20}
-          autoplay
-          resizeMethod={"resize"}
-          resizeMode={"cover"}
-          paginationBoxStyle={{
-            position: "absolute",
-            bottom: 0,
-            padding: 0,
-            alignItems: "center",
-            alignSelf: "center",
-            justifyContent: "center",
-            paddingVertical: 10,
-          }}
-          ImageComponentStyle={{ width: "100%" }}
-          imageLoadingColor="#078ECB"
-        />
-
-        <Text
-          style={{
-            margin: 10,
-            fontSize: 16,
-            fontWeight: "bold",
-            borderBottomWidth: 4,
-            width: 160,
-            borderBottomColor: "#078ECB",
-          }}
-        >
-          Produits En Tendance
-        </Text>
-        <View style={styles.trending}>
-          {trending.map((item, index) => (
-            <TouchableOpacity key={index} style={{ padding: 10 }} onPress={() => navigation.navigate("Info", {
-              id: item.id,
-              title: item.title,
-              price: item?.price,
-              carouselImages: item?.carouselImages,
-              color: item?.color,
-              size: item?.size,
-              oldPrice: item?.oldPrice,
-              item:  item,
-            })}>
-              <Image
-                source={{ uri: item?.image }}
-                style={{
-                  width: 130,
-                  height: 180,
-                  borderRadius: 35 / 2,
-                  resizeMode: "contain",
-                  marginHorizontal: 12,
-                }}
+            </View>
+            <View>
+              <MaterialIcons
+                name="keyboard-arrow-down"
+                size={24}
+                color="white"
               />
-            </TouchableOpacity>
-          ))}
+            </View>
+          </TouchableOpacity>
         </View>
 
-        <Text
-          style={{
-            margin: 10,
-            fontSize: 16,
-            fontWeight: "bold",
-            borderBottomWidth: 4,
-            width: 140,
-            borderBottomColor: "#078ECB",
-          }}
-        >
-          Produits Populaire
-        </Text>
-        {/* <Text style={{margin:10, fontSize:16, fontWeight:'bold', borderBottomWidth:4, width:'30%', borderBottomColor:'#078ECB'}} /> */}
-
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {offers.map((item, index) => (
-            <Pressable key={index} onPress={() => navigation.navigate("Info", {
-              id: item.id,
-              title: item.title,
-              price: item?.price,
-              carouselImages: item?.carouselImages,
-              color: item?.color,
-              size: item?.size,
-              oldPrice: item?.oldPrice,
-              item:  item,
-            })}>
-              <Image
-                source={{ uri: item?.image }}
-                style={{
-                  width: 130,
-                  height: 180,
-                  borderTopRightRadius: 35 / 2,
-                  borderTopLeftRadius: 35 / 2,
-                  resizeMode: "contain",
-                  marginHorizontal: 10,
-                }}
-              />
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          <ScrollView
+            style={{ backgroundColor: "#f5f6fa" }}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          >
+            {lists.map((item, index) => (
               <TouchableOpacity
-                style={{
-                  backgroundColor: "#E31837",
-                  marginHorizontal: 10,
-                  width: 130,
-                }}
-                onPress={() => navigation.navigate("Info", {
-                  id: item.id,
-                  title: item.title,
-                  price: item?.price,
-                  carouselImages: item?.carouselImages,
-                  color: item?.color,
-                  size: item?.size,
-                  oldPrice: item?.oldPrice,
-                  item:  item,
-                })}
+                key={index}
+                style={styles.productListCategories}
               >
+                <Image
+                  style={{
+                    width: 60,
+                    height: 60,
+                    resizeMode: "contain",
+                    borderRadius: 10,
+                  }}
+                  source={{ uri: item.image }}
+                />
                 <Text
-                  style={{ color: "white", fontSize: 15, textAlign: "center" }}
+                  style={{
+                    fontSize: 15,
+                    fontWeight: "bold",
+                    textAlign: "center",
+                  }}
                 >
-                  {item?.offers}
+                  {item.name}
                 </Text>
               </TouchableOpacity>
-            </Pressable>
-          ))}
-        </ScrollView>
-        <Text
-          style={{
-            margin: 10,
-            fontSize: 16,
-            fontWeight: "bold",
-            borderBottomWidth: 4,
-            width: 240,
-            borderBottomColor: "#078ECB",
-          }}
-        >
-          Filtrer les Produits Par Catégorie
-        </Text>
-        <View style={{ marginHorizontal: 10, width: "90%" }}>
-          <DropDownPicker
-            style={{
-              borderColor: "#878787",
-              height: 25,
-              marginBottom: open ? 120 : 25,
-            }}
-            open={open}
-            value={category}
-            items={items}
-            setOpen={setOpen}
-            setValue={setCategory}
-            setItems={setItems}
-            placeholder="Choisir une catégorie"
-            placeholderStyle={styles.placeholderStyle}
-            onOpen={onGenderOpen}
-            zIndex={3000}
-            zIndexInverse={1000}
-          />
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            flexWrap: "wrap",
-          }}
-        >
-          {/* {products.map((item, index) => (
-            <ProductItems item={item} key={index}/>
-          ))} */}
-          {products
-            ?.filter((item) => item.category === category)
-            .map((item, index) => (
-              <ProductItems item={item} key={index} />
             ))}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          </ScrollView>
+
+          <SliderBox
+            images={images}
+            circleLoop
+            dotColor={"#078ECB"}
+            inactiveDotColor={"#f5f6fa"}
+            paginationBoxVerticalPadding={20}
+            autoplay
+            resizeMethod={"resize"}
+            resizeMode={"cover"}
+            paginationBoxStyle={{
+              position: "absolute",
+              bottom: 0,
+              padding: 0,
+              alignItems: "center",
+              alignSelf: "center",
+              justifyContent: "center",
+              paddingVertical: 10,
+            }}
+            ImageComponentStyle={{ width: "100%" }}
+            imageLoadingColor="#078ECB"
+          />
+
+          <Text
+            style={{
+              margin: 10,
+              fontSize: 16,
+              fontWeight: "bold",
+              borderBottomWidth: 4,
+              width: 160,
+              borderBottomColor: "#078ECB",
+            }}
+          >
+            Produits En Tendance
+          </Text>
+          <View style={styles.trending}>
+            {trending.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={{ padding: 10 }}
+                onPress={() =>
+                  navigation.navigate("Info", {
+                    id: item.id,
+                    title: item.title,
+                    price: item?.price,
+                    carouselImages: item?.carouselImages,
+                    color: item?.color,
+                    size: item?.size,
+                    oldPrice: item?.oldPrice,
+                    item: item,
+                  })
+                }
+              >
+                <Image
+                  source={{ uri: item?.image }}
+                  style={{
+                    width: 130,
+                    height: 180,
+                    borderRadius: 35 / 2,
+                    resizeMode: "contain",
+                    marginHorizontal: 12,
+                  }}
+                />
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <Text
+            style={{
+              margin: 10,
+              fontSize: 16,
+              fontWeight: "bold",
+              borderBottomWidth: 4,
+              width: 140,
+              borderBottomColor: "#078ECB",
+            }}
+          >
+            Produits Populaire
+          </Text>
+          {/* <Text style={{margin:10, fontSize:16, fontWeight:'bold', borderBottomWidth:4, width:'30%', borderBottomColor:'#078ECB'}} /> */}
+
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {offers.map((item, index) => (
+              <Pressable
+                key={index}
+                onPress={() =>
+                  navigation.navigate("Info", {
+                    id: item.id,
+                    title: item.title,
+                    price: item?.price,
+                    carouselImages: item?.carouselImages,
+                    color: item?.color,
+                    size: item?.size,
+                    oldPrice: item?.oldPrice,
+                    item: item,
+                  })
+                }
+              >
+                <Image
+                  source={{ uri: item?.image }}
+                  style={{
+                    width: 130,
+                    height: 180,
+                    borderTopRightRadius: 35 / 2,
+                    borderTopLeftRadius: 35 / 2,
+                    resizeMode: "contain",
+                    marginHorizontal: 10,
+                  }}
+                />
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#E31837",
+                    marginHorizontal: 10,
+                    width: 130,
+                  }}
+                  onPress={() =>
+                    navigation.navigate("Info", {
+                      id: item.id,
+                      title: item.title,
+                      price: item?.price,
+                      carouselImages: item?.carouselImages,
+                      color: item?.color,
+                      size: item?.size,
+                      oldPrice: item?.oldPrice,
+                      item: item,
+                    })
+                  }
+                >
+                  <Text
+                    style={{
+                      color: "white",
+                      fontSize: 15,
+                      textAlign: "center",
+                    }}
+                  >
+                    {item?.offers}
+                  </Text>
+                </TouchableOpacity>
+              </Pressable>
+            ))}
+          </ScrollView>
+          <Text
+            style={{
+              margin: 10,
+              fontSize: 16,
+              fontWeight: "bold",
+              borderBottomWidth: 4,
+              width: 240,
+              borderBottomColor: "#078ECB",
+            }}
+          >
+            Filtrer les Produits Par Catégorie
+          </Text>
+          <View style={{ marginHorizontal: 10, width: "90%" }}>
+            <DropDownPicker
+              style={{
+                borderColor: "#878787",
+                height: 25,
+                marginBottom: open ? 120 : 25,
+              }}
+              open={open}
+              value={category}
+              items={items}
+              setOpen={setOpen}
+              setValue={setCategory}
+              setItems={setItems}
+              placeholder="Choisir une catégorie"
+              placeholderStyle={styles.placeholderStyle}
+              onOpen={onGenderOpen}
+              zIndex={3000}
+              zIndexInverse={1000}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            {/* {products.map((item, index) => (
+              <ProductItems item={item} key={index}/>
+            ))} */}
+            {products
+              ?.filter((item) => item.category === category)
+              .map((item, index) => (
+                <ProductItems item={item} key={index} />
+              ))}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+      <BottomModal
+        onBackdropPress={() => setModalVisible(!modalVisible)}
+        swipeDirection={["up", "down"]}
+        swipeThreshold={200}
+        modalAnimation={
+          new SlideAnimation({
+            slideFrom: "bottom",
+          })
+        }
+        onHardwareBackPress={() => setModalVisible(!modalVisible)}
+        visible={modalVisible}
+        onTouchOutside={() => setModalVisible(!modalVisible)}
+      >
+        <ModalContent style={{ width: "100%", height: 400 }}>
+          <View style={{ marginBottom: 8 }}>
+            <Text style={{ fontSize: 17, fontWeight: "bold" }}>
+              Choisir votre adresse
+            </Text>
+
+            <Text
+              style={{
+                fontSize: 15,
+                fontWeight: "400",
+                color: "gray",
+                marginTop: 10,
+              }}
+            >
+              Selectionner l'adresse de livraison pour voir la disponibilitéé de
+              produits ou un point de retrait
+            </Text>
+          </View>
+
+          <ScrollView
+            style={{ marginBottom: 18 }}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          >
+            {/* Adresses added by the client */}
+            <TouchableOpacity
+              style={{
+                width: 140,
+                height: 140,
+                borderColor: "#078ECB",
+                borderWidth: 2,
+                marginTop: 15,
+                justifyContent: "center",
+                padding: 10,
+                alignItems: "center",
+              }}
+              onPress={() => {setModalVisible(false); navigation.navigate('Address')}}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontWeight: "500",
+                  color: "gray",
+                }}
+              >
+                Cliquez ici pour ajouter une adresse ou un point de retrait
+              </Text>
+            </TouchableOpacity>
+          </ScrollView>
+          <View style={{ flexDirection: "column", marginBottom: 5 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 5,
+                marginBottom: 5,
+              }}
+            >
+              <Ionicons name="location-sharp" size={20} color="#078ECB" />
+              <Text>Ajouter une adresse spécifique : Rue, Caréfour ...</Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 5,
+                marginBottom: 5,
+              }}
+            >
+              <Ionicons name="locate" size={20} color="#078ECB" />
+              <Text>Utiliser mon adresse actuele</Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 5,
+                marginBottom: 5,
+              }}
+            >
+              <Ionicons name="earth" size={20} color="#078ECB" />
+              <Text>Livraison en dehors de Bamako</Text>
+            </View>
+          </View>
+        </ModalContent>
+      </BottomModal>
+    </>
   );
 };
 

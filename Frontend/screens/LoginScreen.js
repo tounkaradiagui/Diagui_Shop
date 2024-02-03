@@ -1,4 +1,4 @@
-import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons';
@@ -35,7 +35,7 @@ const LoginScreen = () => {
       email: email,
       password: password,
     };
-    axios.post("http://192.168.234.140:8000/login", user).then((response) => {
+    axios.post("http://192.168.162.140:8000/login", user).then((response) => {
         console.log(response);
         const token = response.data.token;
         AsyncStorage.setItem("authToken", token);

@@ -154,9 +154,36 @@ app.post('/login', async (req, res) => {
 
 });
 
+// User's add address endpoint
+app.post("/addresses",async (req,res) => {
+  try {
+    const {userId, address} = req.body;
+
+    // Get the user from the database using his id
+    const user = await  User.findById(userId);
+
+    if(!user) {
+      res.status.json({message: "L'utilisateur n'existe pas."});
+    }
+
+    // Add the new adress to the users addresses list
+    user.addresses.push(address);
+
+    // Save this modification in the database
+    await user.save();
+    res.status(200).json({message: "Adresse ajoutée avec succés."});
+    
+  } catch (error) {
+    res.status.json({message: "Erreur d'enregistrement ! Veuillez réessayer"})
+    console.log(error)
+  }
+});
+
+
+
 // Mongo DB connection setup
 mongoose.connection.once("open", () => {
   console.log("App connected to MongoDB");
   //Start the server
-  app.listen(PORT, () => console.log(`Server is running on http://192.168.234.140:${PORT}`))
+  app.listen(PORT, () => console.log(`Server is running on http://192.168.162.140:${PORT}`))
 });

@@ -8,6 +8,8 @@ import HomeScreen from '../screens/HomeScreen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import { Ionicons } from '@expo/vector-icons';
 import ProductInfoScreen from '../screens/ProductInfoScreen';
+import AddAddressScreen from '../screens/AddAddressScreen';
+import AddressScreen from '../screens/AddressScreen';
 
 const StackNavigator = () => {
 
@@ -65,6 +67,8 @@ const StackNavigator = () => {
             <Stack.Screen name="Register" options={{headerShown:false}} component={RegisterScreen} />
             <Stack.Screen name="Main" options={{headerShown:false}} component={BottomTabs} />
             <Stack.Screen name="Info" options={{headerShown:false}} component={ProductInfoScreen} />
+            <Stack.Screen name="AddAddress" options={{headerShown:false}} component={AddAddressScreen} />
+            <Stack.Screen name="Address" options={{headerShown:false}} component={AddressScreen} />
         </Stack.Navigator>
     </NavigationContainer>
   )
