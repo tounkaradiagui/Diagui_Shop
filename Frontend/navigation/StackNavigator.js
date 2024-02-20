@@ -10,6 +10,8 @@ import { Ionicons } from '@expo/vector-icons';
 import ProductInfoScreen from '../screens/ProductInfoScreen';
 import AddAddressScreen from '../screens/AddAddressScreen';
 import AddressScreen from '../screens/AddressScreen';
+import CartScreen from '../screens/CartScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 const StackNavigator = () => {
 
@@ -30,7 +32,7 @@ const StackNavigator = () => {
               )
             }
           }/>
-          <Tab.Screen name="Profile" component={HomeScreen} options={
+          <Tab.Screen name="Profile" component={ProfileScreen} options={
             {
               tabBarLabel: "Profil",
               tabBarLabelStyle:{color:"#078ECB"},
@@ -42,7 +44,7 @@ const StackNavigator = () => {
               )
             }
           }/>
-          <Tab.Screen name="Panier" component={HomeScreen} options={
+          <Tab.Screen name="Panier" component={CartScreen} options={
             {
               tabBarLabel: "Panier",
               tabBarLabelStyle:{color:"#078ECB"},
@@ -69,6 +71,8 @@ const StackNavigator = () => {
             <Stack.Screen name="Info" options={{headerShown:false}} component={ProductInfoScreen} />
             <Stack.Screen name="AddAddress" options={{headerShown:false}} component={AddAddressScreen} />
             <Stack.Screen name="Address" options={{headerShown:false}} component={AddressScreen} />
+            <Stack.Screen name="Cart" options={{headerShown:false}} component={CartScreen} />
+            <Stack.Screen name="Profile" options={{headerShown:false}} component={ProfileScreen} />
         </Stack.Navigator>
     </NavigationContainer>
   )

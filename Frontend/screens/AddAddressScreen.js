@@ -6,11 +6,16 @@ import {
   TouchableOpacity,
   View,
   SafeAreaView,
+  Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import HeaderScreen from "./HeaderScreen";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import jwt_decode from 'jwt-decode';
+import { UserType } from "../UserContext";
+import axios from "axios";
 
 const AddAddressScreen = () => {
   const navigation = useNavigation();
@@ -20,8 +25,57 @@ const AddAddressScreen = () => {
   const [city, setCity] = useState("");
   const [street, setStreet] = useState("");
   const [postalCode, setPostalCode] = useState("");
+  const [country, setCountry] = useState("");
+  // const [houseNo, setHousseNo] = useState("");
+  // const [landmark, SetLandmark] = useState("");
 
-  const handleAddress = async () => {};
+  const {userId, setUserId} = useContext(UserType);
+
+  useEffect(() => {
+    const fetchUser = async() => {
+        const token = await AsyncStorage.getItem("authToken");
+        const decodedToken = jwt_decode(token);
+        const userId = decodedToken.userId;
+        setUserId(userId)
+        // console.log("User Token :", JSON.stringify(token, null, 2));
+    }
+
+    fetchUser();
+  },[]);
+  // console.log(userId)
+    console.log("User ID :", JSON.stringify(userId, null, 2));
+
+  const handleAddAddress = async () => {
+    const address = {
+      name,
+      mobileNo,
+      street,
+      postalCode,
+      city,
+      country
+      // houseNo,
+      // landmark,
+  }
+
+    axios.post('http://192.168.8.106:8000/addresses', {userId, address}).then((response) => {
+      // If everything is good, we can create a new item.
+      Alert.alert("Success", "Address added");
+      // setName("");
+      // setMobileNo("");
+      // setCity("");
+      // setStreet("");
+      // setPostalCode("");
+
+      setTimeout(() => {
+        navigation.goBack("Address")
+      }, 500)
+
+      // console.log(response);
+    }).catch((error) => {
+      Alert.alert("Erreur de connexion", "Erreur d'enregistrement");
+      console.log("Erreur: ", error);
+    });
+  };
 
   return (
     <>
@@ -42,6 +96,8 @@ const AddAddressScreen = () => {
             </Text>
             <TextInput
               placeholder="Bamako - Mali"
+              value={country}
+              onChangeText={(text) => setCountry(text)}
               padding={10}
               style={{
                 height: 40,
@@ -199,7 +255,7 @@ const AddAddressScreen = () => {
         </View>
 
         <View style={{ paddingVertical: 30, alignItems: "center" }}>
-          <TouchableOpacity onPress={handleAddress}>
+          <TouchableOpacity onPress={handleAddAddress}>
             <Text
               style={{
                 backgroundColor: "#078ECB",

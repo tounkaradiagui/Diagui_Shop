@@ -28,7 +28,7 @@ const RegisterScreen = () => {
     };
 
     // Envoie d'une requete au backend API en utilisant axios
-    axios.post("http://192.168.162.140:8000/register", userData)
+    axios.post("http://192.168.32.140:8000/register", userData)
       .then((response) => {
         console.log(response.data);
         Alert.alert(

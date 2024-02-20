@@ -15,6 +15,7 @@ const Order = require("./models/Order");
 const app = express();
 
 const PORT = process.env.PORT || 8000;
+const APP_URL = process.env.APP_URL || "http://192.168.8.106"; // for local testing use: http://localhost:8000
 
 console.log(process.env.NODE_ENV);
 connectDB();
@@ -154,36 +155,98 @@ app.post('/login', async (req, res) => {
 
 });
 
-// User's add address endpoint
-app.post("/addresses",async (req,res) => {
+// // User's add address endpoint
+// app.post("/addresses",async (req,res) => {
+//   try {
+//     const {userId, address} = req.body;
+
+//     // Get the user from the database using his id
+//     const user = await  User.findById(userId);
+
+//     if(!user) {
+//       return res.status(404).json({message: "L'utilisateur n'existe pas."});
+//     }
+
+//     // Add the new adress to the users addresses list
+//     user.addresses.push(address);
+
+//     // Save this modification in the database
+//     await user.save();
+
+//     res.status(200).json({message: "Adresse ajoutée avec succés."});
+    
+//   } catch (error) {
+//     res.status(500).json({message: "Erreur d'enregistrement ! Veuillez réessayer"})
+//   }
+// });
+
+// // Retrieve an user's addresses by its ID
+// app.get("/addresses/:userId", async (req ,res) => {
+//   try {
+//     const userId = req.params.userId;
+
+//     // Find user  with given Id and return it along with its addresses
+//     const user = await User.findById(userId);
+    
+//     if(!user) {
+//       return res.status(404).json({message: "L'utilisateur n'existe pas."});
+//     }
+
+//     const addresses = user.addresses;
+
+//     // Get all addresses of a specific user
+//     res.status(200).json({addresses});
+  
+//   } catch (error) {
+//     res.status(500).json({message: "L'adresse n'a pas été trouvé !"});
+//   }
+// });
+
+
+//endpoint to store a new address to the backend
+app.post("/addresses", async (req, res) => {
   try {
-    const {userId, address} = req.body;
+    const { userId, address } = req.body;
 
-    // Get the user from the database using his id
-    const user = await  User.findById(userId);
-
-    if(!user) {
-      res.status.json({message: "L'utilisateur n'existe pas."});
+    //find the user by the Userid
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Add the new adress to the users addresses list
+    //add the new address to the user's addresses array
     user.addresses.push(address);
 
-    // Save this modification in the database
+    //save the updated user in te backend
     await user.save();
-    res.status(200).json({message: "Adresse ajoutée avec succés."});
-    
+
+    res.status(200).json({ message: "Address created Successfully" });
   } catch (error) {
-    res.status.json({message: "Erreur d'enregistrement ! Veuillez réessayer"})
-    console.log(error)
+    res.status(500).json({ message: "Error addding address" });
   }
 });
 
+//endpoint to get all the addresses of a particular user
+app.get("/addresses/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const addresses = user.addresses;
+    res.status(200).json({ addresses });
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieveing the addresses" });
+  }
+});
 
 
 // Mongo DB connection setup
 mongoose.connection.once("open", () => {
   console.log("App connected to MongoDB");
   //Start the server
-  app.listen(PORT, () => console.log(`Server is running on http://192.168.162.140:${PORT}`))
+  app.listen(PORT, () => console.log(`Server is running on ${APP_URL}:${PORT}`))
 });

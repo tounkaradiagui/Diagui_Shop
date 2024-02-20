@@ -15,7 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/CartReducercer";
 
-const ProductInfoScreen = ({ item }) => {
+const ProductInfoScreen = () => {
   const route = useRoute();
   const { width } = Dimensions.get("window");
   const height = (width * 100) / 100;

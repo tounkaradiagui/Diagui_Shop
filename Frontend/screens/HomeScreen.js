@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SliderBox } from "react-native-image-slider-box";
@@ -20,6 +20,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { BottomModal, ModalContent, SlideAnimation } from "react-native-modals";
+import { UserType } from "../UserContext";
+import CartScreen from "./CartScreen";
 
 const HomeScreen = () => {
   const lists = [
@@ -240,10 +242,16 @@ const HomeScreen = () => {
   ];
 
   const navigation = useNavigation();
-  
+
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("men's clothing");
   const [open, setOpen] = useState(false);
+  const { userId, setUserId } = useContext(UserType);
+  const [addresses, setAddresses] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState("");
+
+  console.log("Selected address is : ", JSON.stringify(selectedAddress, null, 2));
+  // Fetching addresses from the database.
 
   const [items, setItems] = useState([
     { label: "men's clothing", value: "men's clothing" },
@@ -268,21 +276,52 @@ const HomeScreen = () => {
   // console.log("products", JSON.stringify(products, null, 2));
 
   const cart = useSelector((state) => state.cart.cart);
+  const [modalVisible, setModalVisible] = useState(false);
   // console.log("Cart Logs", JSON.stringify(cart, null, 2));
+  useEffect(() => {
+    if (userId) {
+      fetchAddresses();
+    }
+  }, [userId, modalVisible]);
 
   const onGenderOpen = useCallback(() => {
     setcompanyOpen(false);
   }, []);
 
-  const [modalVisible, setModalVisible] = useState(false);
+  const fetchAddresses = async () => {
+    try {
+      const response = await axios.get(
+        `http://192.168.8.106:8000/addresses/${userId}`
+      );
+      const { addresses } = response.data;
+
+      setAddresses(addresses);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = await AsyncStorage.getItem("authToken");
+      const decodedToken = jwt_decode(token);
+      const userId = decodedToken.userId;
+      setUserId(userId);
+    };
+
+    fetchUser();
+  }, []);
+
+  // console.log("User addresses:", JSON.stringify(addresses, null, 2));
 
   return (
     <>
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <View style={styles.subHeader}>
-            <TouchableOpacity>
-              <Ionicons name="cart" size={24} color="white" />
+            <TouchableOpacity style={{flexDirection:'row'}}>
+              <Ionicons name="cart" size={24} color="#fff" onPress={() => navigation.navigate("Cart")} />
+              {/* <Text style={{color:"#000", marginLeft: -7, fontSize:15, fontWeight:'bold'}}>{cart.length}</Text> */}
             </TouchableOpacity>
             <Text style={{ color: "white", fontSize: 18, fontWeight: "bold" }}>
               Diagui Shop
@@ -316,7 +355,11 @@ const HomeScreen = () => {
             </View>
             <View>
               <Text style={{ color: "white", fontSize: 14 }}>
-                Livraison à Diagui Tounkara - Ville : Bamako
+                {selectedAddress ? (
+                  <Text>Livraison à {selectedAddress?.name} - Ville : {selectedAddress?.city}</Text>
+                ) : (
+                  `Choisir une adresse de livraison`
+                )}
               </Text>
             </View>
             <View>
@@ -590,6 +633,39 @@ const HomeScreen = () => {
             showsHorizontalScrollIndicator={false}
           >
             {/* Adresses added by the client */}
+            
+            {addresses?.map((item, index) => (
+              <Pressable
+              onPress={() => setSelectedAddress(item)}
+                key={index}
+                style={{
+                  width: 160,
+                  height: 140,
+                  borderColor: "#078ECB",
+                  borderWidth: 2,
+                  marginRight:15,
+                  marginTop: 15,
+                  justifyContent: "center",
+                  padding: 10,
+                  alignItems: "center",
+                  backgroundColor: selectedAddress ? "gold" : "white"
+                }}
+              >
+                <Text style={{textAlign: "center", fontWeight: "bold", color: "gray", }}>
+                  Adresse : {item?.country}
+                </Text>
+
+                <Text numberOfLines={1} style={{textAlign: "center", fontWeight: "bold", color: "gray", }}>
+                  Client : {item?.name}
+                </Text>
+
+                <Text style={{textAlign: "center", width:130, color: "gray", }}>
+                  {item?.city}, {item?.street}
+                </Text>
+
+              </Pressable>
+            ))}
+
             <TouchableOpacity
               style={{
                 width: 140,
@@ -601,7 +677,10 @@ const HomeScreen = () => {
                 padding: 10,
                 alignItems: "center",
               }}
-              onPress={() => {setModalVisible(false); navigation.navigate('Address')}}
+              onPress={() => {
+                setModalVisible(false);
+                navigation.navigate("Address");
+              }}
             >
               <Text
                 style={{
@@ -613,6 +692,7 @@ const HomeScreen = () => {
                 Cliquez ici pour ajouter une adresse ou un point de retrait
               </Text>
             </TouchableOpacity>
+
           </ScrollView>
           <View style={{ flexDirection: "column", marginBottom: 5 }}>
             <View
@@ -659,7 +739,7 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: Platform.OS === "android" ? 40 : 0,
+    paddingTop: Platform.OS === "android" ? 36 : 0,
     flex: 1,
     backgroundColor: "white",
   },

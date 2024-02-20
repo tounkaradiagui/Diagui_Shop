@@ -23,7 +23,7 @@ const ProductItems = ({ item }) => {
     }, 60000)
   }
   const cart = useSelector((state) => state.cart.cart);
-  console.log("Cart Logs", cart);
+  // console.log("Cart Logs", cart);
   return (
     <Pressable
       style={{
