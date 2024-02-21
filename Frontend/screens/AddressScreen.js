@@ -67,7 +67,7 @@ const AddressScreen = () => {
             marginTop: 15,
             paddingHorizontal: 5,
           }}
-          
+
         >
           <Text>Ajouter une nouvelle adresse</Text>
           <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
@@ -93,6 +93,7 @@ const AddressScreen = () => {
                   <TouchableOpacity style={{backgroundColor:"#078ECB", paddingHorizontal:10, paddingVertical:8, marginTop:15, borderRadius:10}}>
                     <Text style={{color:"#fff", textAlign:'center', fontWeight:'bold'}}>Modifier</Text>
                   </TouchableOpacity>
+
 
                   <TouchableOpacity style={{backgroundColor:"#E31837", paddingHorizontal:10, paddingVertical:8, marginTop:10, borderRadius:10}}>
                     <Text style={{color:"#fff", textAlign:'center', fontWeight:'bold'}}>Supprimer</Text>

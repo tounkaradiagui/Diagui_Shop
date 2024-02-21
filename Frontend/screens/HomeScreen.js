@@ -356,9 +356,9 @@ const HomeScreen = () => {
             <View>
               <Text style={{ color: "white", fontSize: 14 }}>
                 {selectedAddress ? (
-                  <Text>Livraison à {selectedAddress?.name} - Ville : {selectedAddress?.city}</Text>
+                  <Text numberOfLines={1} >Livraison à {selectedAddress?.name} - Ville : {selectedAddress?.city}</Text>
                 ) : (
-                  `Choisir une adresse de livraison`
+                  <Text numberOfLines={1}>Sélectionner une adresse de livraison</Text>
                 )}
               </Text>
             </View>
@@ -773,7 +773,7 @@ const styles = StyleSheet.create({
   deliveryAddress: {
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 18,
+    marginHorizontal: 10,
     marginTop: 8,
     gap: 5,
   },
