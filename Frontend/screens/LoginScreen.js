@@ -35,7 +35,7 @@ const LoginScreen = () => {
       email: email,
       password: password,
     };
-    axios.post("http://192.168.8.106:8000/login", user).then((response) => {
+    axios.post("http://192.168.234.140:8000/login", user).then((response) => {
         console.log(response);
         const token = response.data.token;
         AsyncStorage.setItem("authToken", token);
@@ -127,7 +127,7 @@ const LoginScreen = () => {
 
                 <Ionicons
                   onPress={togglePasswordVisibility}
-                  name={showPassword ? "eye" : "eye-off"}
+                  name={showPassword ? "eye-off" : "eye"}
                   size={24}
                   color="black"
                   marginRight={5}

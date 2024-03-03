@@ -12,6 +12,7 @@ import AddAddressScreen from '../screens/AddAddressScreen';
 import AddressScreen from '../screens/AddressScreen';
 import CartScreen from '../screens/CartScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import Checkout from '../screens/Checkout';
 
 const StackNavigator = () => {
 
@@ -73,6 +74,7 @@ const StackNavigator = () => {
             <Stack.Screen name="Address" options={{headerShown:false}} component={AddressScreen} />
             <Stack.Screen name="Cart" options={{headerShown:false}} component={CartScreen} />
             <Stack.Screen name="Profile" options={{headerShown:false}} component={ProfileScreen} />
+            <Stack.Screen name="Checkout" options={{headerShown:false}} component={Checkout} />
         </Stack.Navigator>
     </NavigationContainer>
   )

@@ -53,28 +53,35 @@ const AddAddressScreen = () => {
       postalCode,
       city,
       country
-      // houseNo,
-      // landmark,
-  }
+    }
 
-    axios.post('http://192.168.8.106:8000/addresses', {userId, address}).then((response) => {
-      // If everything is good, we can create a new item.
-      Alert.alert("Success", "Address added");
-      // setName("");
-      // setMobileNo("");
-      // setCity("");
-      // setStreet("");
-      // setPostalCode("");
-
-      setTimeout(() => {
-        navigation.goBack("Address")
-      }, 500)
-
-      // console.log(response);
-    }).catch((error) => {
-      Alert.alert("Erreur de connexion", "Erreur d'enregistrement");
-      console.log("Erreur: ", error);
-    });
+    // Vérifier si tous les  champs sont remplis avant de l'ajouter à la BDD
+    if (name === "" || mobileNo === "" || city === "" || street === "" || postalCode === ""){
+      Alert.alert("Erreur", 'Veuillez renseigner tout les champs');
+    } else {
+      try {
+        response = await axios.post('http://192.168.234.140:8000/addresses', {userId, address}).then((res) => {
+          // If everything is good, we can create a new item.
+          Alert.alert("Success", "Address added");
+          setName("");
+          setMobileNo("");
+          setCity("");
+          setStreet("");
+          setPostalCode("");
+    
+          setTimeout(() => {
+            navigation.goBack("Address")
+          }, 500)
+    
+          // console.log(res);
+        }).catch((error) => {
+          Alert.alert("Erreur de connexion", "Erreur d'enregistrement");
+          console.log("Erreur: ", error);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   return (

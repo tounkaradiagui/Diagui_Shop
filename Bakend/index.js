@@ -15,7 +15,7 @@ const Order = require("./models/Order");
 const app = express();
 
 const PORT = process.env.PORT || 8000;
-const APP_URL = process.env.APP_URL || "http://192.168.8.106"; // for local testing use: http://localhost:8000
+const APP_URL = process.env.APP_URL || "192.168.234.140"; // for local testing use: http://localhost:8000
 
 console.log(process.env.NODE_ENV);
 connectDB();
@@ -212,6 +212,11 @@ app.post("/addresses", async (req, res) => {
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
+    }
+    
+    // Check if all fields are filled
+    if (!address ) {
+      return res.status(400).json({ message: 'Veuillez remplir tous les champs.' });
     }
 
     //add the new address to the user's addresses array

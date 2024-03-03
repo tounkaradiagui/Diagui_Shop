@@ -28,7 +28,7 @@ const RegisterScreen = () => {
     };
 
     // Envoie d'une requete au backend API en utilisant axios
-    axios.post("http://192.168.32.140:8000/register", userData)
+    axios.post("http://192.168.234.140:8000/register", userData)
       .then((response) => {
         console.log(response.data);
         Alert.alert(
@@ -184,7 +184,7 @@ const RegisterScreen = () => {
 
               <Ionicons
                 onPress={togglePasswordVisibility}
-                name={showPassword ? "eye" : "eye-off"}
+                name={showPassword ? "eye-off" : "eye"}
                 size={24}
                 color="black"
                 marginRight={5}

@@ -13,12 +13,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { decrementQuantity, incrementQuantity, removeFromCart } from "../redux/CartReducercer";
+import { useNavigation } from "@react-navigation/native";
 
 const CartScreen = () => {
   const cart = useSelector((state) => state.cart.cart);
   const totalAmount = cart
     ?.map((item) => item.price * item.quantity)
     .reduce((curr, prev) => curr + prev, 0);
+
+    const navigation = useNavigation();
 
     const dispatch = useDispatch();
     const increaseQuantity = (item) => {
@@ -105,7 +108,7 @@ const CartScreen = () => {
                     <Text>
                       <Text style={{ fontWeight: "bold" }}>Note : </Text>{" "}
                       <Text style={{ fontWeight: "bold" }}>
-                        {item?.rating.rate}
+                        {item?.rating?.rate}
                       </Text>{" "}
                     </Text>
                     <Text>
@@ -235,6 +238,7 @@ const CartScreen = () => {
               </Text>
             </View>
             <TouchableOpacity
+            onPress={() => navigation.navigate("Checkout")}
               style={{
                 backgroundColor: "gold",
                 marginVertical: 12,

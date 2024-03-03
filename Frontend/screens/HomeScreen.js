@@ -291,7 +291,7 @@ const HomeScreen = () => {
   const fetchAddresses = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.8.106:8000/addresses/${userId}`
+        `http://192.168.234.140:8000/addresses/${userId}`
       );
       const { addresses } = response.data;
 
@@ -648,7 +648,7 @@ const HomeScreen = () => {
                   justifyContent: "center",
                   padding: 10,
                   alignItems: "center",
-                  backgroundColor: selectedAddress ? "gold" : "white"
+                  backgroundColor: selectedAddress && selectedAddress._id === item?._id ? "gold" : "white"
                 }}
               >
                 <Text style={{textAlign: "center", fontWeight: "bold", color: "gray", }}>
