@@ -60,7 +60,7 @@ const AddAddressScreen = () => {
       Alert.alert("Erreur", 'Veuillez renseigner tout les champs');
     } else {
       try {
-        response = await axios.post('http://192.168.234.140:8000/addresses', {userId, address}).then((res) => {
+        response = await axios.post('http://192.168.8.106:8000/addresses', {userId, address}).then((res) => {
           // If everything is good, we can create a new item.
           Alert.alert("Success", "Address added");
           setName("");

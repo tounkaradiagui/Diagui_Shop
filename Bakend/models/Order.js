@@ -23,7 +23,7 @@ const orderSchema = new mongoose.Schema({
       },
       image: {
         type: String,
-        required: true,
+        required: false,
       },
     },
   ],
@@ -42,7 +42,7 @@ const orderSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    housseNo: {
+    city: {
       type: String,
       required: false,
     },
@@ -50,7 +50,7 @@ const orderSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    landmark: {
+    country: {
       type: String,
       required: false,
     },
@@ -60,7 +60,7 @@ const orderSchema = new mongoose.Schema({
     },
   },
   paymentMethod: {
-    type: Number,
+    type: String,
     required: true,
   },
   createdAt: {

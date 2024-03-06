@@ -1,4 +1,4 @@
-require("dotenv").config();
+const dotenv = require("dotenv").config();
 const express = require("express");
 const nodemon = require("nodemon");
 const nodemailer = require("nodemailer");
@@ -14,8 +14,8 @@ const Order = require("./models/Order");
 
 const app = express();
 
-const PORT = process.env.PORT || 8000;
-const APP_URL = process.env.APP_URL || "192.168.234.140"; // for local testing use: http://localhost:8000
+const PORT = process.env.PORT || 8001;
+const APP_URL = process.env.BASE_URL || "192.168.234.140"; // for local testing use: http://localhost:8000
 
 console.log(process.env.NODE_ENV);
 connectDB();
@@ -247,6 +247,88 @@ app.get("/addresses/:userId", async (req, res) => {
     res.status(500).json({ message: "Error retrieveing the addresses" });
   }
 });
+
+// Endpoint to get all users
+app.get('/users', async (req,res) => {
+  const users = await User.find({});
+  if(!users) {
+    res.status(404).json({message:'No Users Found'})
+  }
+  res.status(200).json({users});
+});
+
+
+// endpoint to store all orders
+app.post('/orders', async(req, res) => {
+  try {
+    const {userId, cartItems, totalPrice, shippingAddress, paymentMethod} = req.body;
+
+    // check if user  exists and has at least one item on his cart
+    const user = await User.findById(userId);
+    if(!user){
+        return res.status(404).json({message:'User not found'});
+    }
+
+    // create a array of product objects from cart items
+    const products = cartItems.map((item) => ({
+      name: item?.title,
+      quantity: item.quantity,
+      price: item.price,
+      image: item?.image
+    }));
+
+    // create an order
+    const order = new Order({
+      user:userId,
+      products:products,
+      totalPrice:totalPrice,
+      shippingAddress:shippingAddress,
+      paymentMethod:paymentMethod
+    });
+
+    await  order.save();
+    return res.status(200).json({order});
+    
+  } catch (error) {
+    console.log(error, "Erreur  d'ajout de commande");
+    res.status(500).json({message:"Server error"});
+  }
+});
+
+// Find order by single user
+app.get('/orders/:userId', async(req, res) => {
+  try {
+    const userId = req.params.userId;
+    const orders = await Order.find({user:userId}).populate("user");
+    if(!orders || orders.length === 0) {
+      return res.status(404).json({message: "No orders found for this user"});
+    }
+    return res.status(200).json({orders});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message: error.message})
+  }
+});
+
+
+
+
+
+//Get user profile infos
+app.get("/profile/:userId", async (req,res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'No user with this id was found!' });
+    }
+    return res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({message:"Error in server!"})
+  }
+});
+
 
 
 // Mongo DB connection setup

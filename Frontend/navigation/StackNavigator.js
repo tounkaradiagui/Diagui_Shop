@@ -13,6 +13,7 @@ import AddressScreen from '../screens/AddressScreen';
 import CartScreen from '../screens/CartScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import Checkout from '../screens/Checkout';
+import OrderScreen from '../screens/OrderScreen';
 
 const StackNavigator = () => {
 
@@ -66,15 +67,16 @@ const StackNavigator = () => {
   return (
     <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
-            <Stack.Screen name="Login" options={{headerShown:false}} component={LoginScreen} />
-            <Stack.Screen name="Register" options={{headerShown:false}} component={RegisterScreen} />
-            <Stack.Screen name="Main" options={{headerShown:false}} component={BottomTabs} />
-            <Stack.Screen name="Info" options={{headerShown:false}} component={ProductInfoScreen} />
-            <Stack.Screen name="AddAddress" options={{headerShown:false}} component={AddAddressScreen} />
-            <Stack.Screen name="Address" options={{headerShown:false}} component={AddressScreen} />
-            <Stack.Screen name="Cart" options={{headerShown:false}} component={CartScreen} />
-            <Stack.Screen name="Profile" options={{headerShown:false}} component={ProfileScreen} />
-            <Stack.Screen name="Checkout" options={{headerShown:false}} component={Checkout} />
+            <Stack.Screen name="Login" options={{headerShown:false}} component={LoginScreen}/>
+            <Stack.Screen name="Register" options={{headerShown:false}} component={RegisterScreen}/>
+            <Stack.Screen name="Main" options={{headerShown:false}} component={BottomTabs}/>
+            <Stack.Screen name="Info" options={{headerShown:false}} component={ProductInfoScreen}/>
+            <Stack.Screen name="AddAddress" options={{headerShown:false}} component={AddAddressScreen}/>
+            <Stack.Screen name="Address" options={{headerShown:false}} component={AddressScreen}/>
+            <Stack.Screen name="Cart" options={{headerShown:false}} component={CartScreen}/>
+            <Stack.Screen name="Profile" options={{headerShown:false}} component={ProfileScreen}/>
+            <Stack.Screen name="Checkout" options={{headerShown:false}} component={Checkout}/>
+            <Stack.Screen name="Order" options={{headerShown:false}} component={OrderScreen}/>
         </Stack.Navigator>
     </NavigationContainer>
   )

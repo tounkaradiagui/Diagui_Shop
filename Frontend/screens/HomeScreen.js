@@ -22,6 +22,8 @@ import { useSelector } from "react-redux";
 import { BottomModal, ModalContent, SlideAnimation } from "react-native-modals";
 import { UserType } from "../UserContext";
 import CartScreen from "./CartScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import jwt_decode from 'jwt-decode';
 
 const HomeScreen = () => {
   const lists = [
@@ -250,7 +252,7 @@ const HomeScreen = () => {
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState("");
 
-  console.log("Selected address is : ", JSON.stringify(selectedAddress, null, 2));
+  // console.log("Selected address is : ", JSON.stringify(selectedAddress, null, 2));
   // Fetching addresses from the database.
 
   const [items, setItems] = useState([
@@ -291,7 +293,7 @@ const HomeScreen = () => {
   const fetchAddresses = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.234.140:8000/addresses/${userId}`
+        `http://192.168.8.106:8000/addresses/${userId}`
       );
       const { addresses } = response.data;
 
@@ -299,6 +301,7 @@ const HomeScreen = () => {
     } catch (error) {
       console.log("error", error);
     }
+    fetchAddresses();
   };
 
   useEffect(() => {
@@ -326,7 +329,9 @@ const HomeScreen = () => {
             <Text style={{ color: "white", fontSize: 18, fontWeight: "bold" }}>
               Diagui Shop
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity
+            onPress={() => navigation.toggleDrawer()}
+            >
               <Ionicons name="menu" size={30} color="white" />
             </TouchableOpacity>
           </View>

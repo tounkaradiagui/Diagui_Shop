@@ -27,7 +27,7 @@ const AddressScreen = () => {
   const fetchAddresses = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.234.140:8000/addresses/${userId}`
+        `http://192.168.8.106:8000/addresses/${userId}`
       );
       const { addresses } = response.data;
 
